@@ -10,10 +10,7 @@
 (function (exports) {
     'use strict';
 
-    var SCREEN_WIDTH = window.innerWidth - 1,
-        SCREEN_HEIGHT = window.innerHeight - 1,
-
-        extend,
+    var extend,
         randomInt,
         randomPosition,
         anirandom;
@@ -47,10 +44,10 @@
         return Math.floor(Math.random() * (max - min + 1)) + min;
     };
 
-    randomPosition = function () {
+    randomPosition = function (scr_w, scr_h) {
         return {
-            x: randomInt(0, SCREEN_WIDTH),
-            y: randomInt(0, SCREEN_HEIGHT)
+            x: randomInt(0, scr_w),
+            y: randomInt(0, scr_h)
         };
     };
 
@@ -60,11 +57,13 @@
                 dotColor: '#fff',
                 dotSize: 1,
                 dotRadius: 1,
-                limit: 150,
-                animation: 'linear'
+                limit: 1000,
+                animation: 'cubic-bezier(.44,0,1,0)'
             }, args),
             bg = document.querySelectorAll(elt),
-            animateDots;
+            animateDots,
+            SCREEN_WIDTH = window.innerWidth - parameters.dotSize,
+            SCREEN_HEIGHT = window.innerHeight - parameters.dotSize;
 
         animateDots = function () {
             var dots = document.querySelectorAll('.dot');
@@ -72,7 +71,7 @@
             Array.prototype.forEach.call(dots, function (dot) {
 
                 window.setInterval(function () {
-                    var newPosition = randomPosition();
+                    var newPosition = randomPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
 
                     dot.style.top = newPosition.y + 'px';
                     dot.style.left = newPosition.x + 'px';
@@ -103,7 +102,7 @@
 
             for (i = 0; i < parameters.limit; i += 1) {
                 clone = dot.cloneNode(true);
-                clonePosition = randomPosition();
+                clonePosition = randomPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
 
                 timer = randomInt(1, 5) * 1000;
 

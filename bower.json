@@ -1,0 +1,34 @@
+{
+  "name": "anirandom.js",
+  "version": "1.0.0",
+  "homepage": "https://github.com/VincentLoy/anirandom.js",
+  "authors": [
+    "VincentLoy <vincent.loy1@gmail.com>"
+  ],
+  "description": "Randomly Animated Background with Javascript",
+  "main": [
+    "dist/anirandom.min.js",
+    "dev/anirandom.js"
+  ],
+  "keywords": [
+    "anirandom",
+    "random",
+    "animation",
+    "background",
+    "jquery",
+    "plugin"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "*.md"
+  ],
+  "dependencies": {
+    "jquery": "~1.11.3"
+  },
+  "devDependencies": {
+    "lesshat": "~3.0.0",
+    "prism": "*"
+  }
+}

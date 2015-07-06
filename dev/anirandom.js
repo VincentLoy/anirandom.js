@@ -13,6 +13,7 @@
     var extend,
         randomInt,
         randomPosition,
+        randomColor,
         anirandom;
 
     extend = function (out) {
@@ -51,33 +52,63 @@
         };
     };
 
+    randomColor = function () {
+        var letters = '0123456789ABCDEF'.split(''),
+            color = '#',
+            i;
+        for (i = 0; i < 6; i += 1) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    };
+
     anirandom = function (elt, args) {
         var parameters = extend({
                 backgroundColor: '#000',
                 dotColor: '#fff',
                 dotSize: 1,
-                dotRadius: 1,
-                limit: 1000,
-                animation: 'cubic-bezier(.44,0,1,0)'
+                dotRadius: 50, // %
+                limit: 1500,
+                delay: 5, //ms
+                delayIncrementation: 1, //ms
+                timerMin: 1500,
+                timerMax: 2000, //ms
+                animation: 'linear'
             }, args),
             bg = document.querySelectorAll(elt),
             animateDots,
+            bubble,
             SCREEN_WIDTH = window.innerWidth - parameters.dotSize,
             SCREEN_HEIGHT = window.innerHeight - parameters.dotSize;
+
+        bubble = function (dot) {
+            dot.style.background = randomColor();
+
+            window.setTimeout(function () {
+                dot.style.background = parameters.dotColor;
+            }, dot.getAttribute('data-timer'));
+        };
 
         animateDots = function () {
             var dots = document.querySelectorAll('.dot');
 
             Array.prototype.forEach.call(dots, function (dot) {
 
-                window.setInterval(function () {
-                    var newPosition = randomPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
+                window.setTimeout(function () {
+                    window.setInterval(function () {
+                        var newPosition = randomPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-                    dot.style.top = newPosition.y + 'px';
-                    dot.style.left = newPosition.x + 'px';
+                        dot.style.top = newPosition.y + 'px';
+                        dot.style.left = newPosition.x + 'px';
 
-                }, dot.getAttribute('data-timer'));
+                        //if (randomInt(0, 1000) <= 500) {
+                            bubble(dot);
+                        //}
 
+                    }, dot.getAttribute('data-timer'));
+                }, parameters.delay);
+
+                parameters.delay += parameters.delayIncrementation;
             });
         };
 
@@ -96,7 +127,7 @@
             dot.style.height = parameters.dotSize + 'px';
             dot.style.width = parameters.dotSize + 'px';
             dot.style.backgroundColor = parameters.dotColor;
-            dot.style.borderRadius = parameters.dotRadius + 'px';
+            dot.style.borderRadius = parameters.dotRadius + '%';
             dot.style.position = 'absolute';
             dot.classList.add('dot');
 
@@ -104,7 +135,7 @@
                 clone = dot.cloneNode(true);
                 clonePosition = randomPosition(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-                timer = randomInt(1, 5) * 1000;
+                timer = randomInt(parameters.timerMin, parameters.timerMax);
 
                 clone.style.top = clonePosition.y + 'px';
                 clone.style.left = clonePosition.x + 'px';
